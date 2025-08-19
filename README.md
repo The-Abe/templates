@@ -1,7 +1,6 @@
 # Templates
 
-Template files to use with envsubst.
+Jinja2 template files to use with the parser in bin/parse.
 
-Cat the file, pipe to `envsubst` write to destination. Easy peasy.
-
-`cat example.file | foo=bar envsubst > destination.file`
+Just call `parse template.jinja output.ext` and it will ask you to fill in the
+variables it finds in the template.
