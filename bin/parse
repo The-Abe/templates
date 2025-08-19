@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+# Load a jinja2 template, parse it, ask for the values of all the variables and
+# render it to the output file.
+#
+# Doesn't bother with validation, since I can't be sure if variables are
+# allowed to be empty.
+
+import sys
+import jinja2
+from jinja2 import meta, FileSystemLoader, Environment, DebugUndefined
+from os.path import exists
+
+def main():
+    if len(sys.argv) < 3:
+        print("Usage: parse <template-file> <output-file>")
+        sys.exit(1)
+
+    if not exists(sys.argv[1]):
+        print(f"Template file '{sys.argv[1]}' does not exist.")
+        sys.exit(1)
+
+    if exists(sys.argv[2]):
+        print(f"Output file '{sys.argv[2]}' already exists. Please remove it first.")
+        sys.exit(1)
+
+    env = Environment(loader = FileSystemLoader('.'), undefined=DebugUndefined)
+    template = env.get_template(sys.argv[1])
+    rendered = template.render()
+    parsed = env.parse(rendered)
+    variables = meta.find_undeclared_variables(parsed)
+
+    values = {}
+    print("Please provide values for the following variables:")
+    for var in sorted(variables):
+        value = input(f"{var}: ")
+        values[var] = value
+
+    rendered = template.render(**values)
+    with open(sys.argv[2], 'w') as f:
+        f.write(rendered)
+
+if __name__ == "__main__":
+    main()
