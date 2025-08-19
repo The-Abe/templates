@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # nvim clang lsp uses this to get the include paths and stuff.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+add_executable({{project}})
+
 if(NOT CMAKE_BUILD_TYPE)
 	set(default_build_type "Debug")
 	message(STATUS "Set the build type to `${default_build_type}` as none was specified.")
@@ -49,8 +51,6 @@ set(PROJECT_VERSION
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_LIST_DIR}/src/*.cpp")
 set(PROJECT_INCLUDE "${CMAKE_CURRENT_LIST_DIR}/include/")
 
-# Declaring our executable
-add_executable({{project}})
 target_sources({{project}} PRIVATE ${SOURCES})
 target_include_directories({{project}} PRIVATE ${PROJECT_INCLUDE})
 
